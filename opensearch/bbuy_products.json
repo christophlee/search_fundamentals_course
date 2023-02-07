@@ -1,18 +1,75 @@
 {
   "settings": {
-    "index.refresh_interval": "5s",
-    "index": {
-      "query": {
-          "default_field": "body"
-      }
-    }  
+    "index.refresh_interval": "5s"
   },
   "mappings": {
     "properties": {
-        "productId": {"type": "text", "analyzer": "english"},
-        "sku": {"type": "text", "analyzer": "english"},
-        "name": {"type": "text", "analyzer": "english"},
-        "type": {"type": "keyword", "ignore_above": "256"}
+      "productId": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "sku": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "name": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "stemmed": {
+            "type": "text",
+            "analyzer": "english"
+          }
+        }
+      },
+      "type": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "shortDescription": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "stemmed": {
+            "type": "text",
+            "analyzer": "english"
+          }
+        }
+      },
+      "longDescription": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "stemmed": {
+            "type": "text",
+            "analyzer": "english"
+          }
+        }
+      }
     }
   }
 }
