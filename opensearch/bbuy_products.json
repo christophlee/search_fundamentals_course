@@ -1,5 +1,18 @@
 {
   "settings": {
-    "index.refresh_interval": "5s"
+    "index.refresh_interval": "5s",
+    "index": {
+      "query": {
+          "default_field": "body"
+      }
+    }  
+  },
+  "mappings": {
+    "properties": {
+        "productId": {"type": "text", "analyzer": "english"},
+        "sku": {"type": "text", "analyzer": "english"},
+        "name": {"type": "text", "analyzer": "english"},
+        "type": {"type": "keyword", "ignore_above": "256"}
+    }
   }
 }
