@@ -108,7 +108,7 @@ def index_file(file, index_name):
     root = tree.getroot()
     children = root.findall("./product")
     docs = []
-    logger.info(f'file has {len(children)} products')
+    #logger.info(f'file has {len(children)} products')
     for i,child in enumerate(children):
         doc = {}
         for idx in range(0, len(mappings), 2):
@@ -123,10 +123,10 @@ def index_file(file, index_name):
 
         if len(docs) >= 2000 or i == len(children)-1:
 
-            logger.info(f'Indexing docs {docs_indexed} through {docs_indexed + len(docs)}...')
             bulk(client,docs)
             docs_indexed += len(docs)
             docs = []
+            logger.info(f'{docs_indexed} documents indexed...')
 
     return docs_indexed
 
@@ -136,7 +136,7 @@ def index_file(file, index_name):
 @click.option('--workers', '-w', default=8, help="The number of workers to use to process files")
 def main(source_dir: str, index_name: str, workers: int):
 
-    files = glob.glob(source_dir + "/products_0242_19788476_to_19863856.xml")
+    files = glob.glob(source_dir + "/products_024*.xml")
     docs_indexed = 0
     start = perf_counter()
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as executor:
