@@ -72,6 +72,9 @@
       },
       "regularPrice": {
         "type": "float"
+      },
+      "salesRankShortTerm": {
+        "type": "long"
       }
     }
   }

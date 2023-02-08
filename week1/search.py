@@ -151,7 +151,21 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
                     "field": "image.keyword"
                 }
             }
-        }
+        },
+        "highlight": {
+            "fields": {
+                "name": {},
+                "shortDescription": {},
+                "longDescription": {}
+            }
+        },
+        "sort": [
+            {
+                sort: {
+                    "order": sortDir
+                }
+            }
+        ]
     }
 
     return query_obj
