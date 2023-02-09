@@ -123,10 +123,9 @@ def index_file(file, index_name):
 
         if len(docs) >= 2000 or i == len(children)-1:
 
-            bulk(client,docs)
+            response = bulk(client,docs)
             docs_indexed += len(docs)
             docs = []
-            logger.info(f'{docs_indexed} documents indexed...')
 
     return docs_indexed
 
@@ -143,6 +142,7 @@ def main(source_dir: str, index_name: str, workers: int):
         futures = [executor.submit(index_file, file, index_name) for file in files]
         for future in concurrent.futures.as_completed(futures):
             docs_indexed += future.result()
+            logger.info(f'{docs_indexed} documents indexed...')
 
     finish = perf_counter()
     logger.info(f'Done. Total docs: {docs_indexed} in {(finish - start)/60} minutes')
