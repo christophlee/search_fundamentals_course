@@ -110,16 +110,59 @@ def create_query(user_query, filters, sort="_score", sortDir="desc"):
     print("Query: {} Filters: {} Sort: {}".format(user_query, filters, sort))
     query_obj = {
         'size': 10,
+        # "query": {
+        #     "bool": {
+        #         "must": {
+        #             "query_string": {
+        #                 "query": user_query,
+        #                 "fields": ["name^100", "shortDescription^50", "longDescription^10", "department"],
+        #                 "phrase_slop": 3
+        #             },
+        #         },
+        #         "filter": filters
+        #     },
         "query": {
-            "bool": {
-                "must": {
-                    "query_string": {
-                        "query": user_query,
-                        "fields": ["name^100", "shortDescription^50", "longDescription^10", "department"],
-                        "phrase_slop": 3
+            "function_score": {
+                "query": {
+                    "bool": {
+                        "must": {
+                            "query_string": {
+                                "query": user_query,
+                                "fields": ["name^100", "shortDescription^50", "longDescription^10", "department"],
+                                "phrase_slop": 3
+                            },
+                        },
+                        "filter": filters
                     },
                 },
-                "filter": filters
+                "boost_mode": "replace",
+                "score_mode": "avg",
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "salesRankShortTerm",
+                            "factor": 1,
+                            "modifier": "reciprocal",
+                            "missing": 100000000
+                        }
+                    },
+                    {
+                        "field_value_factor": {
+                            "field": "salesRankMediumTerm",
+                            "factor": 1,
+                            "modifier": "reciprocal",
+                            "missing": 100000000
+                        }
+                    },
+                    {
+                        "field_value_factor": {
+                            "field": "salesRankLongTerm",
+                            "factor": 1,
+                            "modifier": "reciprocal",
+                            "missing": 100000000
+                        }
+                    }
+                ]
             },
         },
         "aggs": {
