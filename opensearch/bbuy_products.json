@@ -75,6 +75,24 @@
       },
       "salesRankShortTerm": {
         "type": "long"
+      },
+      "salesRankMediumTerm": {
+        "type": "long"
+      },
+      "salesRankLongTerm": {
+        "type": "long"
+      },
+      "bestSellingRank": {
+        "type": "long"
+      },
+      "active": {
+        "type": "boolean"
+      },
+      "customerReviewCount": {
+        "type": "long"
+      },
+      "customerReviewAverage": {
+        "type": "float"
       }
     }
   }
