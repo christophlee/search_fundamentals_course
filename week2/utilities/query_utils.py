@@ -173,7 +173,7 @@ def add_spelling_suggestions(query_obj, user_query):
 
 # Given the user query from the UI, the query object we've built so far and a Pandas data GroupBy data frame,
 # construct and add a query that consists of the ids from the items that were clicked on by users for that query
-# priors_gb (loaded in __init__.py) is grouped on query and has a Series of SKUs/doc ids for every document that was cliecked on for this query
+# priors_gb (loaded in __init__.py) is grouped on query and has a Series of SKUs/doc ids for every document that was clicked on for this query
 def add_click_priors(query_obj, user_query, priors_gb):
     try:
         prior_clicks_for_query = priors_gb.get_group(user_query)
@@ -181,10 +181,19 @@ def add_click_priors(query_obj, user_query, priors_gb):
             click_prior = ""
             #### W2, L1, S1
             # Create a string object of SKUs and weights that will boost documents matching the SKU
-            print("TODO: Implement me")
+            sku_boost_dict = (prior_clicks_for_query.sku.value_counts()/len(prior_clicks_for_query)).to_dict()
+            click_prior = " ".join([f'{sku}^{boost}' for sku, boost in sku_boost_dict.items()])
+            # print (click_prior)
             if click_prior != "":
-                click_prior_query_obj = None # Implement a query object that matches on the ID or SKU with weights of
+                click_prior_query_obj = {
+                    "query_string": {
+                        "query": click_prior,
+                        "fields": ["sku"],
+                        "boost": 50
+                    }
+                } # Implement a query object that matches on the ID or SKU with weights of
                 # This may feel like cheating, but it's really not, esp. in ecommerce where you have all this prior data,
+                #click_prior_query_obj = None
                 if click_prior_query_obj is not None:
                     query_obj["query"]["function_score"]["query"]["bool"]["should"].append(click_prior_query_obj)
     except KeyError as ke:
